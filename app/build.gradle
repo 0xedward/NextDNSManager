@@ -5,7 +5,7 @@ plugins {
 android {
     compileSdk 34
     defaultConfig {
-        applicationId "io.0xedward.nextdnsmanagement"
+        applicationId "com.doubleangels.nextdnsmanagement"
         minSdkVersion 29
         targetSdk 34
         versionCode 234
