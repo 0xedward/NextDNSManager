@@ -1,24 +1,10 @@
+## Changes in forked version
+
+- Fast and dirty removal of all Sentry-related code
+
 <!--suppress ALL -->
 <p align="center">
-  <img src="https://img.shields.io/github/release/doubleangels/NextDNSManager.svg?logo=github&label=GitHub%20Build&style=for-the-badge" alt="GitHub Build">
-  <img src="https://img.shields.io/f-droid/v/com.doubleangels.nextdnsmanagement.svg?logo=F-Droid&label=F-Droid%20Build&style=for-the-badge" alt="F-Droid Build">
-  <img src="https://img.shields.io/github/actions/workflow/status/doubleangels/NextDNSManager/.github/workflows/deploy.yml?label=Deployment%20Pipeline&style=for-the-badge" alt="Main Deployment">
-  <img src="https://img.shields.io/github/actions/workflow/status/doubleangels/NextDNSManager/.github/workflows/test-dev.yml?label=Development%20Testing&style=for-the-badge" alt="Development Testing">
-  <img src="https://img.shields.io/librariesio/github/doubleangels/NextDNSManager?label=Dependencies&style=for-the-badge" alt="Dependencies">
-  <img src="https://img.shields.io/github/issues/doubleangels/NextDNSManager?label=GitHub%20Issues&style=for-the-badge" alt="GitHub Issues">
-  <img src="https://img.shields.io/github/issues-pr/doubleangels/NextDNSManager?label=GitHub%20Pull%20Requests&style=for-the-badge" alt="GitHub Pull Requests">
-</p>
-
-<p align="center">
-  <img src="icons/web/icon-192.png" alt="Icon">
-  <a href="https://play.google.com/store/apps/details?id=com.doubleangels.nextdnsmanagement">
-    <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play">
-  </a>
-  <a href="https://f-droid.org/en/packages/com.doubleangels.nextdnsmanagement">
-    <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="F-Droid">
-  </a>
-</p>
-
+  <img src="https://img.shields.io/github/release/0xedward/NextDNSManager.svg?logo=github&label=GitHub%20Build&style=for-the-badge" alt="GitHub Build">
 <p align="center"> 
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Screenshot">
 </p>
