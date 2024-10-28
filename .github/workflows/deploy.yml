@@ -21,7 +21,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Lint
-        run: ./gradlew lint
+        run: ./gradlew lint --info
         continue-on-error: false
 
   build-for-github:
