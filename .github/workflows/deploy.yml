@@ -182,28 +182,28 @@ jobs:
       #     track: production
       #     whatsNewDirectory: whatsnew
 
-  appsweep-scan:
-    needs: ["build-for-github"]
-    # needs: ["build-for-github", "build-for-google-play"]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # appsweep-scan:
+  #   needs: ["build-for-github"]
+  #   # needs: ["build-for-github", "build-for-google-play"]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Download APK from Github release artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: github-release-apk
-          path: .
+  #     - name: Download APK from Github release artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: github-release-apk
+  #         path: .
 
-      - uses: guardsquare/appsweep-action@main
-        with:
-          appsweep_api_key: ${{ secrets.APPSWEEP_API_KEY }}
-          input_file: app-release.apk
-          commit_hash: ${{ github.sha }}
+  #     - uses: guardsquare/appsweep-action@main
+  #       with:
+  #         appsweep_api_key: ${{ secrets.APPSWEEP_API_KEY }}
+  #         input_file: app-release.apk
+  #         commit_hash: ${{ github.sha }}
 
   delete-workflow-runs:
-    needs: ["build-for-github", "build-for-google-play", "publish-built-files", "appsweep-scan"]
+    needs: ["build-for-github", "publish-built-files"]
     runs-on: ubuntu-latest
     steps:
       - name: Delete workflow runs
