@@ -20,50 +20,34 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.doubleangels.nextdnsmanagement.protocol.VisualIndicator;
-import com.doubleangels.nextdnsmanagement.sentry.SentryInitializer;
-import com.doubleangels.nextdnsmanagement.sentry.SentryManager;
 
 import java.util.Locale;
 
 public class AuthorActivity extends AppCompatActivity {
 
-    public SentryManager sentryManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_author);
 
-        // Initialize SentryManager
-        sentryManager = new SentryManager(this);
-
         // Get shared preferences
         SharedPreferences sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
         try {
-            // Check if Sentry is enabled and initialize
-            if (sentryManager.isEnabled()) {
-                SentryInitializer.initialize(this);
-            }
 
             // Setup toolbar
             setupToolbarForActivity();
 
             // Setup language for the activity
             String appLocale = setupLanguageForActivity();
-            sentryManager.captureMessage("Using locale: " + appLocale);
 
             // Setup dark mode for the activity
             setupDarkModeForActivity(sharedPreferences);
 
             // Setup visual indicator for the activity
-            setupVisualIndicatorForActivity(sentryManager, this);
-
-            // Setup personal links
-            setupPersonalLinks(sentryManager);
+            setupVisualIndicatorForActivity(this);
         } catch (Exception e) {
-            // Capture and log exceptions using Sentry
-            sentryManager.captureException(e);
         }
     }
 
@@ -107,40 +91,10 @@ public class AuthorActivity extends AppCompatActivity {
     }
 
     // Method to setup visual indicator for the activity
-    private void setupVisualIndicatorForActivity(SentryManager sentryManager, LifecycleOwner lifecycleOwner) {
+    private void setupVisualIndicatorForActivity(LifecycleOwner lifecycleOwner) {
         try {
             new VisualIndicator(this).initialize(this, lifecycleOwner, this);
         } catch (Exception e) {
-            // Capture and log exceptions using Sentry
-            sentryManager.captureException(e);
-        }
-    }
-
-    // Method to setup personal links
-    public void setupPersonalLinks(SentryManager sentryManager) {
-        try {
-            // Set onClickListeners for personal links (GitHub, Email, Website)
-            ImageView githubButton = findViewById(R.id.githubImageView);
-            ImageView emailButton = findViewById(R.id.emailImageView);
-            ImageView websiteButton = findViewById(R.id.websiteImageView);
-            githubButton.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.github_profile_url)));
-                startActivity(intent);
-            });
-
-            emailButton.setOnClickListener(view -> {
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                emailIntent.setData(Uri.parse("mailto:nextdns@doubleangels.com"));
-                startActivity(Intent.createChooser(emailIntent, "Send Email"));
-            });
-
-            websiteButton.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.author_url)));
-                startActivity(intent);
-            });
-        } catch (Exception e) {
-            // Capture and log exceptions using Sentry
-            sentryManager.captureException(e);
         }
     }
 

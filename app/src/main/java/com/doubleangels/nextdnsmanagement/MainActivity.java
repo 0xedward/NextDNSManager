@@ -37,8 +37,6 @@ import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
 import com.doubleangels.nextdnsmanagement.protocol.VisualIndicator;
-import com.doubleangels.nextdnsmanagement.sentry.SentryInitializer;
-import com.doubleangels.nextdnsmanagement.sentry.SentryManager;
 
 import java.util.Locale;
 
@@ -56,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize SentryManager for error tracking
-        // SentryManager instance for error tracking
-        SentryManager sentryManager = new SentryManager(this);
         // Get SharedPreferences for storing app preferences
         SharedPreferences sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
@@ -68,26 +63,17 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{POST_NOTIFICATIONS}, 1);
             }
 
-            // Check if Sentry is enabled and initialize it
-            if (sentryManager.isEnabled()) {
-                sentryManager.captureMessage("Sentry is enabled for NextDNS Manager.");
-                SentryInitializer.initialize(this);
-            }
-
             // Setup toolbar
             setupToolbarForActivity();
             // Setup language/locale
             String appLocale = setupLanguageForActivity();
-            sentryManager.captureMessage("Using locale: " + appLocale);
             // Setup dark mode
-            setupDarkModeForActivity(sentryManager, sharedPreferences);
+            setupDarkModeForActivity(sharedPreferences);
             // Setup visual indicator
-            setupVisualIndicatorForActivity(sentryManager, this);
+            setupVisualIndicatorForActivity(this);
             // Setup WebView
             setupWebViewForActivity(getString(R.string.main_url));
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
     }
 
@@ -123,37 +109,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Setup dark mode for the activity
-    private void setupDarkModeForActivity(SentryManager sentryManager, SharedPreferences sharedPreferences) {
+    private void setupDarkModeForActivity(SharedPreferences sharedPreferences) {
         String darkMode = sharedPreferences.getString("dark_mode", "match");
         if (darkMode.contains("match")) {
             // Dark mode set to match system
-            sentryManager.setTag("dark_mode", "match");
-            sentryManager.captureMessage("Dark mode set to match system.");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
             int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
             this.darkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
         } else if (darkMode.contains("on")) {
             // Dark mode set to on
-            sentryManager.setTag("dark_mode", "on");
-            sentryManager.captureMessage("Dark mode set to on.");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             this.darkMode = true;
         } else {
             // Dark mode set to off
-            sentryManager.setTag("dark_mode", "off");
-            sentryManager.captureMessage("Dark mode set to off.");
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             this.darkMode = false;
         }
     }
 
     // Setup visual indicator for the activity
-    private void setupVisualIndicatorForActivity(SentryManager sentryManager, LifecycleOwner lifecycleOwner) {
+    private void setupVisualIndicatorForActivity(LifecycleOwner lifecycleOwner) {
         try {
             new VisualIndicator(this).initialize(this, lifecycleOwner, this);
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
     }
 

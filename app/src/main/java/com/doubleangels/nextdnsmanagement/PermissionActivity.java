@@ -25,8 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.doubleangels.nextdnsmanagement.adaptors.PermissionsAdapter;
 import com.doubleangels.nextdnsmanagement.protocol.VisualIndicator;
-import com.doubleangels.nextdnsmanagement.sentry.SentryInitializer;
-import com.doubleangels.nextdnsmanagement.sentry.SentryManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,36 +32,24 @@ import java.util.Locale;
 
 public class PermissionActivity extends AppCompatActivity {
 
-    // SentryManager instance for error tracking
-    public SentryManager sentryManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission);
 
-        // Initialize SentryManager for error tracking
-        sentryManager = new SentryManager(this);
         // Get SharedPreferences for storing app preferences
         SharedPreferences sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
         try {
-            // Check if Sentry is enabled and initialize it
-            if (sentryManager.isEnabled()) {
-                SentryInitializer.initialize(this);
-            }
             // Setup toolbar
             setupToolbarForActivity();
             // Setup language/locale
             String appLocale = setupLanguageForActivity();
-            sentryManager.captureMessage("Using locale: " + appLocale);
             // Setup dark mode
             setupDarkModeForActivity(sharedPreferences);
             // Setup visual indicator
-            setupVisualIndicatorForActivity(sentryManager, this);
+            setupVisualIndicatorForActivity(this);
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
 
         // Setup RecyclerView for displaying permissions list
@@ -71,7 +57,7 @@ public class PermissionActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Get list of permissions and set up RecyclerView adapter
-        List<PermissionInfo> permissions = getPermissionsList(sentryManager);
+        List<PermissionInfo> permissions = getPermissionsList();
         PermissionsAdapter adapter = new PermissionsAdapter(permissions);
         recyclerView.setAdapter(adapter);
     }
@@ -115,17 +101,15 @@ public class PermissionActivity extends AppCompatActivity {
     }
 
     // Setup visual indicator for the activity
-    private void setupVisualIndicatorForActivity(SentryManager sentryManager, LifecycleOwner lifecycleOwner) {
+    private void setupVisualIndicatorForActivity(LifecycleOwner lifecycleOwner) {
         try {
             new VisualIndicator(this).initialize(this, lifecycleOwner, this);
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
     }
 
     // Retrieve the list of permissions requested by the app
-    private List<PermissionInfo> getPermissionsList(SentryManager sentryManager) {
+    private List<PermissionInfo> getPermissionsList() {
         List<PermissionInfo> permissions = new ArrayList<>();
         try {
             // Get package info including requested permissions
@@ -139,8 +123,6 @@ public class PermissionActivity extends AppCompatActivity {
                 }
             }
         } catch (PackageManager.NameNotFoundException e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
         return permissions;
     }

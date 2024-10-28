@@ -15,7 +15,6 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.doubleangels.nextdnsmanagement.R;
-import com.doubleangels.nextdnsmanagement.sentry.SentryManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -36,8 +35,6 @@ import okhttp3.internal.http2.ConnectionShutdownException;
 
 public class VisualIndicator {
 
-    // SentryManager instance for error tracking
-    private final SentryManager sentryManager;
     // OkHttpClient instance for making HTTP requests
     private final OkHttpClient httpClient;
     // ConnectivityManager instance for network-related operations
@@ -47,7 +44,6 @@ public class VisualIndicator {
 
     // Constructor to initialize VisualIndicator with context
     public VisualIndicator(Context context) {
-        this.sentryManager = new SentryManager(context);
         this.httpClient = new OkHttpClient();
     }
 
@@ -113,8 +109,6 @@ public class VisualIndicator {
             // Check inherited DNS and update visual indicator
             checkInheritedDNS(context, activity);
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
     }
 
@@ -134,7 +128,6 @@ public class VisualIndicator {
                 try {
                     // If response is not successful, capture message and return
                     if (!response.isSuccessful()) {
-                        sentryManager.captureMessage("Response was not successful.");
                         response.close();
                         return;
                     }
@@ -190,9 +183,7 @@ public class VisualIndicator {
                 e instanceof SocketException ||
                 e instanceof SSLException ||
                 e instanceof ConnectionShutdownException) {
-            sentryManager.captureMessage("Network exception captured: " + e);
         } else {
-            sentryManager.captureException(e);
         }
     }
 }

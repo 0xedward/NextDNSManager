@@ -6,7 +6,6 @@
 # Keep all classes in other dependencies
 -keep class com.jakewharton.processphoenix.** { *; }
 -keep class com.squareup.retrofit2.** { *; }
--keep class io.sentry.** { *; }
 -keep class org.mozilla.geckoview.** { *; }
 
 # Keep all public and protected methods in the above libraries
@@ -15,7 +14,6 @@
 -keepclassmembers class com.google.android.material.** { public protected *; }
 -keepclassmembers class com.jakewharton.processphoenix.** { public protected *; }
 -keepclassmembers class com.squareup.retrofit2.** { public protected *; }
--keepclassmembers class io.sentry.** { public protected *; }
 -keepclassmembers class org.mozilla.geckoview.** { public protected *; }
 
 # Keep the Retrofit interfaces and their methods

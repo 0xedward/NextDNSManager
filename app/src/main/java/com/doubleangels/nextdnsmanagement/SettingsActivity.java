@@ -25,8 +25,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.doubleangels.nextdnsmanagement.protocol.VisualIndicator;
-import com.doubleangels.nextdnsmanagement.sentry.SentryInitializer;
-import com.doubleangels.nextdnsmanagement.sentry.SentryManager;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.util.Locale;
@@ -34,38 +32,26 @@ import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    // SentryManager instance for error tracking
-    public SentryManager sentryManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        // Initialize SentryManager for error tracking
-        sentryManager = new SentryManager(this);
         // Get SharedPreferences for storing app preferences
         SharedPreferences sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
         try {
-            // Check if Sentry is enabled and initialize it
-            if (sentryManager.isEnabled()) {
-                SentryInitializer.initialize(this);
-            }
             // Setup toolbar
             setupToolbarForActivity();
             // Setup language/locale
             String appLocale = setupLanguageForActivity();
-            sentryManager.captureMessage("Using locale: " + appLocale);
             // Setup dark mode
             setupDarkModeForActivity(sharedPreferences);
             // Initialize views (PreferenceFragment)
             initializeViews();
             // Setup visual indicator
-            setupVisualIndicatorForActivity(sentryManager, this);
+            setupVisualIndicatorForActivity(this);
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
     }
 
@@ -101,13 +87,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     // Setup visual indicator for the activity
-    private void setupVisualIndicatorForActivity(SentryManager sentryManager, LifecycleOwner lifecycleOwner) {
+    private void setupVisualIndicatorForActivity(LifecycleOwner lifecycleOwner) {
         try {
             VisualIndicator visualIndicator = new VisualIndicator(this);
             visualIndicator.initialize(this, lifecycleOwner, this);
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
     }
 
@@ -128,8 +112,6 @@ public class SettingsActivity extends AppCompatActivity {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
             // Get SharedPreferences
             SharedPreferences sharedPreferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
-            // Set initial visibility for certain preferences based on user settings
-            setInitialSentryVisibility(sharedPreferences);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
                 // Find the PreferenceCategory by its key
                 PreferenceCategory darkModePreferenceCategory = findPreference("darkmode");
@@ -140,15 +122,12 @@ public class SettingsActivity extends AppCompatActivity {
             } else {
                 // Find preferences and set up listeners
                 ListPreference darkModePreference = findPreference("dark_mode");
-                SwitchPreference sentryEnablePreference = findPreference("sentry_enable");
                 assert darkModePreference != null;
                 setupDarkModeChangeListener(darkModePreference, sharedPreferences);
-                setupSentryChangeListener(sentryEnablePreference, sharedPreferences);
             }
             // Set up click listeners for various buttons
             setupButton("whitelist_domain_1_button", R.string.whitelist_domain_1);
             setupButton("whitelist_domain_2_button", R.string.whitelist_domain_2);
-            setupButton("sentry_info_button", R.string.sentry_info_url);
             setupButtonForIntent("author_button");
             setupButton("github_button", R.string.github_url);
             setupButton("github_issue_button", R.string.github_issues_url);
@@ -167,13 +146,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
-        // Set initial visibility for Sentry-related preferences
-        private void setInitialSentryVisibility(SharedPreferences sharedPreferences) {
-            boolean visibility = sharedPreferences.getBoolean("sentry_enable", false);
-            setPreferenceVisibility("whitelist_domains", visibility);
-            setPreferenceVisibility("whitelist_domain_1_button", visibility);
-            setPreferenceVisibility("whitelist_domain_2_button", visibility);
-        }
 
         // Set up click listener for a button preference
         private void setupButton(String buttonKey, int textResource) {
@@ -224,23 +196,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 return true;
             });
-        }
-
-        // Set up listener for Sentry enable/disable preference changes
-        private void setupSentryChangeListener(SwitchPreference switchPreference, SharedPreferences sharedPreferences) {
-            if (switchPreference != null) {
-                switchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                    boolean isEnabled = (boolean) newValue;
-                    // Store new value in SharedPreferences and adjust visibility of related preferences
-                    SharedPreferences.Editor preferenceEdit = sharedPreferences.edit();
-                    preferenceEdit.putBoolean("sentry_enable", isEnabled);
-                    setPreferenceVisibility("whitelist_domains", isEnabled);
-                    setPreferenceVisibility("whitelist_domain_1_button", isEnabled);
-                    setPreferenceVisibility("whitelist_domain_2_button", isEnabled);
-                    preferenceEdit.apply();
-                    return true;
-                });
-            }
         }
 
         // Set visibility of a preference

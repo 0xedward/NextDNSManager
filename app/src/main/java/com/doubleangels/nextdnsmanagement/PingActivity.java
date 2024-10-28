@@ -20,16 +20,12 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.doubleangels.nextdnsmanagement.protocol.VisualIndicator;
-import com.doubleangels.nextdnsmanagement.sentry.SentryInitializer;
-import com.doubleangels.nextdnsmanagement.sentry.SentryManager;
 
 import java.util.Locale;
 import java.util.Objects;
 
 public class PingActivity extends AppCompatActivity {
 
-    // SentryManager instance for error tracking
-    public SentryManager sentryManager;
     // WebView instance for displaying web content
     public WebView webView;
     public WebView webView2;
@@ -39,30 +35,21 @@ public class PingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ping);
 
-        // Initialize SentryManager for error tracking
-        sentryManager = new SentryManager(this);
         // Get SharedPreferences for storing app preferences
         SharedPreferences sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
         try {
-            // Check if Sentry is enabled and initialize it
-            if (sentryManager.isEnabled()) {
-                SentryInitializer.initialize(this);
-            }
             // Setup toolbar
             setupToolbarForActivity();
             // Setup language/locale
             String appLocale = setupLanguageForActivity();
-            sentryManager.captureMessage("Using locale: " + appLocale);
             // Setup dark mode
             setupDarkModeForActivity(sharedPreferences);
             // Setup visual indicator
-            setupVisualIndicatorForActivity(sentryManager, this);
+            setupVisualIndicatorForActivity(this);
             // Setup WebView
             setupWebViewForActivity(getString(R.string.ping_url), getString(R.string.test_url));
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
     }
 
@@ -105,12 +92,10 @@ public class PingActivity extends AppCompatActivity {
     }
 
     // Setup visual indicator for the activity
-    private void setupVisualIndicatorForActivity(SentryManager sentryManager, LifecycleOwner lifecycleOwner) {
+    private void setupVisualIndicatorForActivity(LifecycleOwner lifecycleOwner) {
         try {
             new VisualIndicator(this).initialize(this, lifecycleOwner, this);
         } catch (Exception e) {
-            // Catch and log exceptions
-            sentryManager.captureException(e);
         }
     }
 

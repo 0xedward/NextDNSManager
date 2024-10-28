@@ -11,32 +11,6 @@
             app:defaultValue="match" />
     </PreferenceCategory>
     <PreferenceCategory
-        app:key="sentry"
-        app:title="@string/sentry"
-        app:selectable="false">
-        <Preference
-            app:summary="@string/whitelist_instructions"
-            app:selectable="false" />
-        <SwitchPreference
-            app:key="sentry_enable"
-            app:title="@string/sentry_enable_instructions"
-            app:defaultValue="false" />
-        <Preference
-            app:key="whitelist_domains"
-            app:summary="@string/whitelist_domains"
-            app:selectable="false" />
-        <Preference
-            app:key="whitelist_domain_1_button"
-            app:summary="@string/whitelist_domain_1" />
-        <Preference
-            app:key="whitelist_domain_2_button"
-            app:summary="@string/whitelist_domain_2" />
-        <Preference
-            app:key="sentry_info_button"
-            app:title="@string/sentry_info"
-            app:summary="@string/sentry_info_instructions" />
-    </PreferenceCategory>
-    <PreferenceCategory
         app:title="@string/developer"
         app:selectable="false">
         <Preference

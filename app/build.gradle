@@ -1,6 +1,5 @@
 plugins {
     id "com.android.application"
-    id "io.sentry.android.gradle" version "4.11.0"
 }
 
 android {
@@ -19,8 +18,6 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debugSentryOn {
         }
     }
     namespace 'com.doubleangels.nextdnsmanagement'
@@ -58,16 +55,5 @@ dependencies {
     implementation 'com.jakewharton:process-phoenix:3.0.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'io.sentry:sentry-android:7.14.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
-}
-
-sentry {
-    authToken = System.getenv("SENTRY_AUTH_TOKEN")
-    includeProguardMapping = true
-    autoUploadProguardMapping = true
-    uploadNativeSymbols = true
-    autoUploadNativeSymbols = true
-    includeNativeSources = true
-    includeSourceContext = true
 }

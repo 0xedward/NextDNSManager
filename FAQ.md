@@ -24,11 +24,6 @@ Unless NextDNS/Android make major changes, there are a few features that won't b
 
 This is one of the benefits of open source! Anyone can look at all the code and verify for themselves that nothing nafarious is occuring with your data. NextDNS Manager has no access to your account and simply is a way to access the official dashboard on the go. You can think of the app as a very simplified web browser within an app that will only display NextDNS related sites. No information about the app (or your account) leaves your device.
 
-## In the settings for the app, I see a section about Sentry error tracking. Does this mean you're tracking me?
-
-No. [Sentry](https://github.com/getsentry/sentry) is a service for developers that gathers information about app crashes, bugs, and other errors and provides them to the developer. This information may contain information about your device (phone type, Android version, etc), about the app (app version, where in the app bugs are occurring, etc), and about the bugs themselves (crash data, stack traces, exceptions, etc). No personal information is collected about you, and nobody other than the maintainer of this project has access to the Sentry error data collected. Furthermore, this is an entirely opt-in option. As of version 5.0.0, there is a toggle in the settings to enable/disable Sentry within your app, and domains to whitelist/blacklist Sentry in your NextDNS configuration are provided. If you choose to disable Sentry, it is not initialized at all. If you choose to enable Sentry, thank you! Your bug and error data helps me push out bug fixes and improvements faster and more reliably.
-.
-
 ## I am new to using NextDNS and I don't understand how to use it, can you teach me?
 
 Because NextDNS support and communication from the developers is lacking, I am happy to try and help any users that open an issue or discussions post. For simple setup/configuration questions or specific questions about this app and its features, I will do whatever I can to help users get to a point where their configuration is working. 
