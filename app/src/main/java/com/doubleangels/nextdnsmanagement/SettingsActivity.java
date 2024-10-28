@@ -126,8 +126,6 @@ public class SettingsActivity extends AppCompatActivity {
                 setupDarkModeChangeListener(darkModePreference, sharedPreferences);
             }
             // Set up click listeners for various buttons
-            setupButton("whitelist_domain_1_button", R.string.whitelist_domain_1);
-            setupButton("whitelist_domain_2_button", R.string.whitelist_domain_2);
             setupButtonForIntent("author_button");
             setupButton("github_button", R.string.github_url);
             setupButton("github_issue_button", R.string.github_issues_url);
